@@ -1,0 +1,5 @@
+pruebas/
+outputs/
+__pycache__/
+*.pyc
+
