@@ -29,14 +29,14 @@ optimization:
   algorithm: nsga2
   population_size: 200
   generations: 30
-  eval_ticks: 5000
+  eval_ticks: 10000
   n_workers: 0
   output_dir: outputs/moop
   save_pareto: true
   strategy_window: 50
   fixed_area: 60000
   variables:
-    robots:          { lower: 5,   upper: 50 }
+    robots:          { lower: 5,   upper: 70 }
     width:           { lower: 100, upper: 400 }
     stations:        { lower: 5,   upper: 30 }
     orders_burst:    { lower: 0,   upper: 1 }
