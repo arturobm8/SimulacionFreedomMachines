@@ -5,7 +5,7 @@
 
 // --- Constants --------------------------------------------------------------
 const MAX_GRID: u32 = 90000u;    // 300*300
-const MAX_ROBOTS: u32 = 50u;
+const MAX_ROBOTS: u32 = 70u;
 const MAX_ORDERS: u32 = 600u;
 const MAX_SHELVES: u32 = 50000u;
 const MAX_STATIONS: u32 = 30u;

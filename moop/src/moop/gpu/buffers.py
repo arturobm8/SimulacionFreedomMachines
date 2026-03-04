@@ -29,7 +29,7 @@ def _cached_layout(seed: int, width: int, height: int, stations: int):
 
 # Must match sim.wgsl constants
 MAX_GRID = 90_000
-MAX_ROBOTS = 50
+MAX_ROBOTS = 70
 MAX_ORDERS = 600
 MAX_SHELVES = 50_000
 MAX_STATIONS = 30
