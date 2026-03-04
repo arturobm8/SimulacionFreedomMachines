@@ -1,0 +1,55 @@
+scenario: seed42
+seed: 44
+ticks: 10000
+robots: 20
+
+warehouse:
+  width: 120
+  height: 80
+  stations: 20
+
+orders:
+  count: 600
+  burst: false
+
+paths:
+  ffmpeg: ffmpeg
+  output_dir: outputs
+
+visualization:
+  enabled: false
+  fps: 20
+  steps_per_frame: 25
+
+logging:
+  level: INFO
+  file: sim.log
+
+optimization:
+  algorithm: nsga2
+  population_size: 200
+  generations: 30
+  eval_ticks: 5000
+  n_workers: 0
+  output_dir: outputs/moop
+  save_pareto: true
+  strategy_window: 50
+  fixed_area: 60000
+  variables:
+    robots:          { lower: 5,   upper: 50 }
+    width:           { lower: 100, upper: 400 }
+    stations:        { lower: 5,   upper: 30 }
+    orders_burst:    { lower: 0,   upper: 1 }
+  objectives:
+    - name: deadlocks
+      metric_key: deadlocks
+      direction: minimize
+    - name: throughput
+      metric_key: throughput_per_1000_ticks
+      direction: maximize
+    - name: completed_orders
+      metric_key: completed_orders
+      direction: maximize
+    - name: avg_order_time
+      metric_key: avg_order_time_ticks
+      direction: minimize

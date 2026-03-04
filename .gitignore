@@ -2,4 +2,7 @@ pruebas/
 outputs/
 __pycache__/
 *.pyc
-
+.python-version
+.venv/
+uv.lock
+sim.log

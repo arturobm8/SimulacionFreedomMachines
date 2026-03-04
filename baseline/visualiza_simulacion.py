@@ -12,7 +12,7 @@ from sim_core import Pedido, SimAlmacen, cargar_layout
 
 # ======== FFMPEG PATH ============================================
 # Ruta fija, eventualmente se agregará el switch --ffmpeg_path.
-# mpl.rcParams["animation.ffmpeg_path"] = r"C:\ffmpeg\bin\ffmpeg.exe"
+mpl.rcParams["animation.ffmpeg_path"] = r"/opt/homebrew/bin/ffmpeg"
 # =================================================================
 
 LIBRE = 0
