@@ -22,12 +22,20 @@ def main(
     headless: bool = typer.Option(
         False, "--headless", help="Run without TUI, print results to stdout"
     ),
+    baseline: bool = typer.Option(
+        False, "--baseline", help="Run baseline simulation from config and save metrics"
+    ),
     workers: Optional[int] = typer.Option(
         None, "--workers", "-w", help="Number of parallel workers"
     ),
 ) -> None:
     """MOOP — Multi-Objective Optimization for warehouse simulation."""
     sim_cfg = SimConfig.from_yaml(config)
+
+    if baseline:
+        _run_baseline(sim_cfg)
+        return
+
     cfg = sim_cfg.optimization
     seed = sim_cfg.seed
     orders_count = sim_cfg.orders.count
@@ -39,6 +47,53 @@ def main(
         _run_headless(cfg, seed, orders_count)
     else:
         _run_tui(cfg, seed, orders_count)
+
+
+def _run_baseline(sim_cfg: "SimConfig") -> None:
+    """Run a single simulation with baseline params and save metrics."""
+    import json
+
+    from moop.evaluator import evaluate_individual
+
+    bl = sim_cfg.baseline
+    ticks = sim_cfg.ticks
+
+    typer.echo(
+        f"Baseline — seed={bl.seed}  robots={bl.robots}  "
+        f"grid={bl.width}×{bl.height}  stations={bl.stations}  "
+        f"orders={bl.orders_count}  burst={bl.orders_burst}  ticks={ticks}"
+    )
+
+    metrics = evaluate_individual(
+        robots=bl.robots,
+        width=bl.width,
+        height=bl.height,
+        stations=bl.stations,
+        orders_count=bl.orders_count,
+        orders_burst=bl.orders_burst,
+        strategy_window=bl.strategy_window,
+        seed=bl.seed,
+        ticks=ticks,
+    )
+
+    # Add config params to metrics for traceability
+    metrics["width"] = bl.width
+    metrics["height"] = bl.height
+    metrics["stations"] = bl.stations
+    metrics["orders_burst"] = bl.orders_burst
+    metrics["orders_count"] = bl.orders_count
+
+    out_dir = Path(sim_cfg.paths.output_dir) / "baseline"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / "metrics.json"
+
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(metrics, f, indent=2)
+
+    typer.echo()
+    for k, v in metrics.items():
+        typer.echo(f"  {k}: {v}")
+    typer.echo(f"\nSaved to {out_path}")
 
 
 def _run_headless(cfg: OptConfig, seed: int, orders_count: int) -> None:

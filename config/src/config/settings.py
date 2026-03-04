@@ -48,6 +48,18 @@ class LoggingConfig:
 
 
 @dataclass(slots=True)
+class BaselineConfig:
+    seed: int = 44
+    robots: int = 20
+    width: int = 120
+    height: int = 80
+    stations: int = 20
+    orders_count: int = 600
+    orders_burst: bool = True
+    strategy_window: int = 50
+
+
+@dataclass(slots=True)
 class OptVarBounds:
     lower: int = 0
     upper: int = 1
@@ -110,6 +122,7 @@ class SimConfig:
     paths: PathsConfig = field(default_factory=PathsConfig)
     visualization: VisualizationConfig = field(default_factory=VisualizationConfig)
     logging: LoggingConfig = field(default_factory=LoggingConfig)
+    baseline: BaselineConfig = field(default_factory=BaselineConfig)
     optimization: OptimizationConfig = field(default_factory=OptimizationConfig)
 
     # -- helpers -------------------------------------------------------------
@@ -161,6 +174,12 @@ def _build_config(raw: dict[str, Any]) -> SimConfig:
         objectives=opt_objs,
     )
 
+    baseline_config = BaselineConfig(
+        **_pick(raw.get("baseline", {}),
+                ("seed", "robots", "width", "height", "stations",
+                 "orders_count", "orders_burst", "strategy_window")),
+    )
+
     return SimConfig(
         **_pick(raw, ("scenario", "seed", "ticks", "robots")),
         warehouse=WarehouseConfig(**_pick(raw.get("warehouse", {}), ("width", "height", "stations"))),
@@ -168,6 +187,7 @@ def _build_config(raw: dict[str, Any]) -> SimConfig:
         paths=PathsConfig(**_pick(raw.get("paths", {}), ("ffmpeg", "output_dir"))),
         visualization=VisualizationConfig(**_pick(raw.get("visualization", {}), ("enabled", "fps", "steps_per_frame"))),
         logging=LoggingConfig(**_pick(raw.get("logging", {}), ("level", "file"))),
+        baseline=baseline_config,
         optimization=opt_config,
     )
 

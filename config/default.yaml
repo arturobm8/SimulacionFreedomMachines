@@ -1,4 +1,4 @@
-scenario: seed42
+scenario: seed44
 seed: 44
 ticks: 10000
 robots: 50
@@ -24,6 +24,16 @@ visualization:
 logging:
   level: INFO
   file: sim.log
+
+baseline:
+  seed: 44
+  robots: 20
+  width: 300
+  height: 200
+  stations: 20
+  orders_count: 600
+  orders_burst: true
+  strategy_window: 50
 
 optimization:
   algorithm: nsga2
