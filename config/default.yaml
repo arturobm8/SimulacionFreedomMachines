@@ -1,12 +1,12 @@
 scenario: seed44
 seed: 44
 ticks: 10000
-robots: 50
+robots: 69
 
 warehouse:
-  width: 328
-  height: 182
-  stations: 17
+  width: 350
+  height: 171
+  stations: 8
 
 orders:
   count: 600
